@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://qp5u4i7wl5fe"]
+
+[ext_resource type="Script" uid="uid://b3ol8t8krkngl" path="res://Main.gd" id="1_r0du0"]
+[ext_resource type="Script" uid="uid://d3unpl5o8xvlb" path="res://Grid.gd" id="2_cm0pq"]
+
+[node name="Main" type="Node2D" unique_id=654678731]
+script = ExtResource("1_r0du0")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1742027741]
+offset_left = -39.0
+offset_top = -540.0
+offset_right = 681.0
+offset_bottom = 740.0
+mouse_filter = 2
+color = Color(0.08, 0.08, 0.1, 1)
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=1079887244]
+offset_top = 80.0
+offset_right = 720.0
+offset_bottom = 180.0
+theme_override_font_sizes/font_size = 64
+text = "Score: 0"
+horizontal_alignment = 1
+
+[node name="Grid" type="Node2D" parent="." unique_id=1245138694]
+position = Vector2(120, 240)
+script = ExtResource("2_cm0pq")
+
+[node name="Tray" type="Node2D" parent="." unique_id=607274034]
+
+[node name="GameOverLabel" type="Label" parent="." unique_id=603353504]
+visible = false
+offset_top = 450.0
+offset_right = 720.0
+offset_bottom = 650.0
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 80
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1

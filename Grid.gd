@@ -22,6 +22,12 @@ func _ready() -> void:
 			add_child(rect)
 			cell_visuals[x][y] = rect
 
+func clear_grid() -> void:
+	for x in Global.GRID_SIZE:
+		for y in Global.GRID_SIZE:
+			cell_state[x][y] = null
+			cell_visuals[x][y].color = Color(0.15, 0.15, 0.18)
+
 func is_inside_grid(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.x < Global.GRID_SIZE and cell.y >= 0 and cell.y < Global.GRID_SIZE
 

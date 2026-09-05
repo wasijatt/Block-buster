@@ -1,7 +1,7 @@
 extends Node
 
 const GRID_SIZE := 8
-const CELL_SIZE := 60
+const CELL_SIZE := 82
 
 # ── Candy-color block palette ─────────────────────────────────────────────────
 const COLORS: Array[Color] = [
@@ -92,3 +92,15 @@ func save_high_score(new_score: int) -> void:
 
 func get_random_fruit_theme() -> Dictionary:
 	return FRUIT_GEMS[randi() % FRUIT_GEMS.size()]
+
+# ── Badge/Achievement System ──────────────────────────────────────────────────
+const BADGES: Array[Dictionary] = [
+	{ "level": 2, "name": "Golden Mango 🥭", "color": Color(1.00, 0.72, 0.15) },
+	{ "level": 3, "name": "Ruby Strawberry 🍓", "color": Color(0.96, 0.22, 0.38) },
+	{ "level": 4, "name": "Emerald Kiwi 🥝", "color": Color(0.18, 0.88, 0.48) },
+	{ "level": 5, "name": "Sapphire Blueberry 🫐", "color": Color(0.22, 0.58, 0.98) },
+	{ "level": 7, "name": "Amethyst Plum 🍇", "color": Color(0.72, 0.28, 0.98) },
+	{ "level": 10, "name": "Diamond Pineapple 🍍", "color": Color(1.0, 0.84, 0.0) },
+	{ "level": 15, "name": "Neon Dragonfruit 🐉", "color": Color(1.0, 0.0, 0.5) },
+	{ "level": 20, "name": "Cosmic Starfruit 🌟", "color": Color(0.3, 0.8, 1.0) }
+]

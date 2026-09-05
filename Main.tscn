@@ -2,24 +2,24 @@
 
 [ext_resource type="Script" uid="uid://b3ol8t8krkngl" path="res://Main.gd" id="1_r0du0"]
 [ext_resource type="Script" uid="uid://d3unpl5o8xvlb" path="res://Grid.gd" id="2_cm0pq"]
-[ext_resource type="Texture2D" uid="uid://b8rtbosqqqsh4" path="res://assets/bg_funky.png" id="3_bg"]
+[ext_resource type="PackedScene" uid="uid://anim_bg_scene_uid" path="res://AnimatedBackground.tscn" id="2_anim_bg"]
 [ext_resource type="Texture2D" uid="uid://dxgmrjjm8neel" path="res://assets/restart_icon.jpg" id="5_restart"]
 [ext_resource type="AudioStream" uid="uid://dwicfw8twitp7" path="res://sounds/click.wav" id="6_click"]
 [ext_resource type="AudioStream" uid="uid://clqi8eiqf6xjv" path="res://sounds/drop.wav" id="7_drop"]
 [ext_resource type="AudioStream" uid="uid://yeu6mowg6hxq" path="res://sounds/clear.wav" id="8_clear"]
 [ext_resource type="AudioStream" uid="uid://uhph7ms5i0xi" path="res://sounds/game_over.wav" id="9_gameover"]
+[ext_resource type="AudioStream" uid="uid://c_snd_pickup_uid" path="res://sounds/pickup.wav" id="10_pickup"]
+[ext_resource type="AudioStream" uid="uid://c_snd_combo_uid" path="res://sounds/combo.wav" id="11_combo"]
+[ext_resource type="AudioStream" uid="uid://c_snd_badge_uid" path="res://sounds/badge.wav" id="12_badge"]
+[ext_resource type="AudioStream" uid="uid://c_snd_invalid_uid" path="res://sounds/invalid.wav" id="13_invalid"]
 
 [node name="Main" type="Node2D" unique_id=654678731]
 script = ExtResource("1_r0du0")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1742027741]
-offset_right = 720.0
-offset_bottom = 1280.0
-mouse_filter = 2
-color = Color(0.08, 0.08, 0.1, 1)
+[node name="AnimatedBackground" parent="." instance=ExtResource("2_anim_bg")]
+
 
 [node name="LevelInfoLabel" type="Label" parent="." unique_id=1079887245]
-visible = false
 offset_top = 25.0
 offset_right = 720.0
 offset_bottom = 70.0
@@ -60,163 +60,274 @@ script = ExtResource("2_cm0pq")
 
 [node name="Tray" type="Node2D" parent="." unique_id=607274034]
 
-[node name="GameOverLabel" type="Label" parent="." unique_id=603353504]
+[node name="GameOverModal" type="Control" parent="." unique_id=603353504]
 visible = false
-z_index = 10
-offset_left = 80.0
-offset_top = 440.0
-offset_right = 640.0
-offset_bottom = 740.0
-theme_override_colors/font_color = Color(1, 0.38, 0.38, 1)
-theme_override_colors/font_shadow_color = Color(0.3, 0, 0, 0.8)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 72
-text = "GAME OVER"
-horizontal_alignment = 1
-
-[node name="RestartButton" type="Button" parent="GameOverLabel" unique_id=603353505]
-custom_minimum_size = Vector2(240, 80)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -120.0
-offset_top = -110.0
-offset_right = 120.0
-offset_bottom = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 36
-text = "RETRY"
-icon = ExtResource("5_restart")
-expand_icon = true
-
-[node name="LevelCompleteLabel" type="Label" parent="." unique_id=603353506]
-visible = false
-z_index = 10
-offset_left = 80.0
-offset_top = 440.0
-offset_right = 640.0
-offset_bottom = 740.0
-theme_override_colors/font_color = Color(0.35, 0.95, 0.6, 1)
-theme_override_colors/font_shadow_color = Color(0, 0.3, 0.1, 0.8)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 72
-text = "LEVEL CLEAR!"
-horizontal_alignment = 1
-
-[node name="NextLevelButton" type="Button" parent="LevelCompleteLabel" unique_id=603353507]
-custom_minimum_size = Vector2(240, 80)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -120.0
-offset_top = -110.0
-offset_right = 120.0
-offset_bottom = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 36
-text = "NEXT LEVEL"
-
-[node name="WelcomeScreen" type="Control" parent="." unique_id=987654321]
+z_index = 50
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_right = 720.0
 offset_bottom = 1280.0
-grow_horizontal = 2
-grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="WelcomeScreen" unique_id=111111111]
+[node name="Dimmer" type="ColorRect" parent="GameOverModal" unique_id=603353508]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_bg")
-expand_mode = 1
-stretch_mode = 6
+color = Color(0.04, 0.04, 0.09, 0.85)
 
-[node name="TitleLabel" type="Label" parent="WelcomeScreen" unique_id=222222222]
+[node name="Card" type="Panel" parent="GameOverModal" unique_id=603353509]
+custom_minimum_size = Vector2(560, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -240.0
+offset_right = 280.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="GameOverModal/Card" unique_id=603353510]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 220.0
-offset_bottom = 340.0
+offset_top = 35.0
+offset_bottom = 115.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1.0, 0.78, 0.24, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
+theme_override_colors/font_shadow_color = Color(0.5, 0.05, 0.05, 0.85)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 64
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreSubLabel" type="Label" parent="GameOverModal/Card" unique_id=603353511]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 135.0
+offset_bottom = 175.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7, 0.68, 0.85, 1)
+theme_override_font_sizes/font_size = 28
+text = "FINAL SCORE"
+horizontal_alignment = 1
+
+[node name="FinalScoreLabel" type="Label" parent="GameOverModal/Card" unique_id=603353512]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 180.0
+offset_bottom = 265.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 68
+text = "0"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="GameOverModal/Card" unique_id=603353513]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 35.0
+offset_top = -140.0
+offset_right = -35.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="HomeButton" type="Button" parent="GameOverModal/Card/ButtonsHBox" unique_id=603353514]
+custom_minimum_size = Vector2(210, 85)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "MENU"
+
+[node name="RestartButton" type="Button" parent="GameOverModal/Card/ButtonsHBox" unique_id=603353505]
+custom_minimum_size = Vector2(210, 85)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RETRY"
+
+[node name="LevelCompleteModal" type="Control" parent="." unique_id=603353506]
+visible = false
+z_index = 50
+layout_mode = 3
+offset_right = 720.0
+offset_bottom = 1280.0
+
+
+[node name="Dimmer" type="ColorRect" parent="LevelCompleteModal" unique_id=603353515]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.04, 0.09, 0.85)
+
+[node name="Card" type="Panel" parent="LevelCompleteModal" unique_id=603353516]
+custom_minimum_size = Vector2(560, 500)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -250.0
+offset_right = 280.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="LevelCompleteModal/Card" unique_id=603353517]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 35.0
+offset_bottom = 115.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.35, 0.95, 0.6, 1)
+theme_override_colors/font_shadow_color = Color(0.05, 0.35, 0.15, 0.85)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 58
+text = "LEVEL CLEAR!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubLabel" type="Label" parent="LevelCompleteModal/Card" unique_id=603353518]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 130.0
+offset_bottom = 175.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.75, 0.72, 0.9, 1)
+theme_override_font_sizes/font_size = 30
+text = "GREAT JOB!"
+horizontal_alignment = 1
+
+[node name="ScoreDisplayLabel" type="Label" parent="LevelCompleteModal/Card" unique_id=603353519]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 180.0
+offset_bottom = 265.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 64
+text = "Score: 0"
+horizontal_alignment = 1
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="LevelCompleteModal/Card" unique_id=603353520]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 35.0
+offset_top = -140.0
+offset_right = -35.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="HomeButton" type="Button" parent="LevelCompleteModal/Card/ButtonsHBox" unique_id=603353521]
+custom_minimum_size = Vector2(210, 85)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "MENU"
+
+[node name="NextLevelButton" type="Button" parent="LevelCompleteModal/Card/ButtonsHBox" unique_id=603353507]
+custom_minimum_size = Vector2(210, 85)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "NEXT ➔"
+
+
+[node name="WelcomeScreen" type="Control" parent="." unique_id=987654321]
+visible = false
+z_index = 25
+layout_mode = 3
+offset_right = 720.0
+offset_bottom = 1280.0
+mouse_filter = 2
+
+[node name="TitleLabel" type="Label" parent="WelcomeScreen" unique_id=222222222]
+layout_mode = 1
+offset_top = 260.0
+offset_right = 720.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(1, 0.78, 0.24, 1)
+theme_override_font_sizes/font_size = 84
 text = "BLOCK BUSTER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HighScoreLabel" type="Label" parent="WelcomeScreen" unique_id=222222224]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 350.0
-offset_bottom = 420.0
-grow_horizontal = 2
+offset_top = 380.0
+offset_right = 720.0
+offset_bottom = 450.0
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
-theme_override_font_sizes/font_size = 36
-text = "HIGH SCORE: 0"
+theme_override_font_sizes/font_size = 42
+text = "🏆 HIGH SCORE: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ClassicButton" type="Button" parent="WelcomeScreen" unique_id=333333334]
-custom_minimum_size = Vector2(340, 90)
+custom_minimum_size = Vector2(360, 96)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -170.0
-offset_top = 20.0
-offset_right = 170.0
-offset_bottom = 110.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 180.0
+offset_top = 680.0
+offset_right = 540.0
+offset_bottom = 776.0
+mouse_filter = 0
 theme_override_font_sizes/font_size = 44
 text = "CLASSIC"
 
 [node name="LevelsButton" type="Button" parent="WelcomeScreen" unique_id=333333335]
-custom_minimum_size = Vector2(340, 90)
+custom_minimum_size = Vector2(360, 96)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -170.0
-offset_top = 135.0
-offset_right = 170.0
-offset_bottom = 225.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = 180.0
+offset_top = 800.0
+offset_right = 540.0
+offset_bottom = 896.0
+mouse_filter = 0
 theme_override_font_sizes/font_size = 44
 text = "LEVELS"
 
+
 [node name="LevelSelectionScreen" type="Control" parent="." unique_id=987654322]
 visible = false
+z_index = 25
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_right = 720.0
 offset_bottom = 1280.0
-grow_horizontal = 2
-grow_vertical = 2
+
 
 [node name="ColorRect" type="ColorRect" parent="LevelSelectionScreen" unique_id=111111112]
 layout_mode = 1
@@ -279,3 +390,15 @@ stream = ExtResource("8_clear")
 
 [node name="GameOverSound" type="AudioStreamPlayer" parent="." unique_id=444444444]
 stream = ExtResource("9_gameover")
+
+[node name="PickupSound" type="AudioStreamPlayer" parent="." unique_id=444444445]
+stream = ExtResource("10_pickup")
+
+[node name="ComboSound" type="AudioStreamPlayer" parent="." unique_id=444444446]
+stream = ExtResource("11_combo")
+
+[node name="BadgeSound" type="AudioStreamPlayer" parent="." unique_id=444444447]
+stream = ExtResource("12_badge")
+
+[node name="InvalidSound" type="AudioStreamPlayer" parent="." unique_id=444444448]
+stream = ExtResource("13_invalid")

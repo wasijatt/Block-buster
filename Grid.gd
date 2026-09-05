@@ -16,6 +16,29 @@ const SHINE_COLOR  := Color(0.28, 0.26, 0.40, 0.30)  # top-left depth hint
 const BLOCK_DEPTH  := 7
 
 func _ready() -> void:
+	# ── Main Board Outer Frame Backdrop ───────────────────────────────────────
+	var board_total_size: float = Global.GRID_SIZE * Global.CELL_SIZE
+	var frame := Panel.new()
+	frame.size = Vector2(board_total_size + 16, board_total_size + 16)
+	frame.position = Vector2(-8, -8)
+	frame.z_index = -1
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	var fsb := StyleBoxFlat.new()
+	fsb.bg_color = Color(0.06, 0.05, 0.11, 0.96) # Deep dark backdrop for maximum contrast
+	fsb.set_corner_radius_all(24)
+	fsb.border_width_left = 3
+	fsb.border_width_top = 3
+	fsb.border_width_right = 3
+	fsb.border_width_bottom = 3
+	fsb.border_color = Color(0.38, 0.34, 0.58, 0.90) # Crisp glowing border
+	fsb.shadow_color = Color(0.0, 0.0, 0.0, 0.70)
+	fsb.shadow_size = 20
+	fsb.shadow_offset = Vector2(0, 8)
+	fsb.anti_aliasing = true
+	frame.add_theme_stylebox_override("panel", fsb)
+	add_child(frame)
+
 	cell_state.resize(Global.GRID_SIZE)
 	cell_visuals.resize(Global.GRID_SIZE)
 	cell_blocks.resize(Global.GRID_SIZE)
@@ -31,23 +54,26 @@ func _ready() -> void:
 			cell_blocks[x][y] = null
 			var bx: float = x * Global.CELL_SIZE
 			var by: float = y * Global.CELL_SIZE
+
 			var panel := Panel.new()
-			panel.size = Vector2(Global.CELL_SIZE - 4, Global.CELL_SIZE - 4)
-			panel.position = Vector2(bx + 2, by + 2)
+			panel.size = Vector2(Global.CELL_SIZE - 6, Global.CELL_SIZE - 6)
+			panel.position = Vector2(bx + 3, by + 3)
 			panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
+			# ── High-Contrast Empty Cell Design ──────────────────────────────
 			var sb := StyleBoxFlat.new()
-			sb.bg_color = Color(0.12, 0.11, 0.18, 0.90)
-			sb.set_corner_radius_all(12)
+			sb.bg_color = Color(0.14, 0.12, 0.22, 0.95) # Crisp indigo-slate
+			sb.set_corner_radius_all(14)
 			sb.border_width_bottom = 2
 			sb.border_width_right = 2
-			sb.border_width_top = 1
-			sb.border_width_left = 1
-			sb.border_color = Color(0.25, 0.22, 0.35, 0.60)
+			sb.border_width_top = 2
+			sb.border_width_left = 2
+			sb.border_color = Color(0.32, 0.28, 0.48, 0.85) # High visibility cell boundaries
 			sb.anti_aliasing = true
 			panel.add_theme_stylebox_override("panel", sb)
 			add_child(panel)
 			cell_visuals[x][y] = panel
+
 
 # ── Grid reset ─────────────────────────────────────────────────────────────────
 func clear_grid() -> void:
@@ -78,7 +104,7 @@ func can_place_anywhere(shape: Array) -> bool:
 	return false
 
 # ── Placement ─────────────────────────────────────────────────────────────────
-func place_shape(shape: Array, origin: Vector2i, color: Color) -> void:
+func place_shape(shape: Array, origin: Vector2i, color: Color, level: int = 1) -> void:
 	for offset in shape:
 		var cell: Vector2i = origin + offset
 		cell_state[cell.x][cell.y] = color
@@ -86,7 +112,7 @@ func place_shape(shape: Array, origin: Vector2i, color: Color) -> void:
 		if cell_blocks[cell.x][cell.y] != null:
 			cell_blocks[cell.x][cell.y].queue_free()
 		# Build 3D block node at cell center and pop it in
-		var block := _create_3d_block(cell.x, cell.y, color)
+		var block := _create_3d_block(cell.x, cell.y, color, level)
 		add_child(block)
 		cell_blocks[cell.x][cell.y] = block
 		_tween_pop_in(block)
@@ -94,7 +120,7 @@ func place_shape(shape: Array, origin: Vector2i, color: Color) -> void:
 # ── 3D Block builder ───────────────────────────────────────────────────────────
 # Creates a Node2D centred on the cell, with all 3D faces as ColorRect children.
 # The node's position == cell centre so scale tweens expand/collapse from centre.
-func _create_3d_block(x: int, y: int, col: Color) -> Node2D:
+func _create_3d_block(x: int, y: int, col: Color, level: int = 1) -> Node2D:
 	var block := Node2D.new()
 	block.z_index = 2
 
@@ -105,6 +131,9 @@ func _create_3d_block(x: int, y: int, col: Color) -> Node2D:
 	var sz: float = Global.CELL_SIZE - 6
 	var hf: float = sz * 0.5
 
+	var is_premium: bool = level > 5
+	var is_diamond: bool = level > 15
+
 	# ── Main 3D Gem Face (Rounded Vector StyleBox) ──────────────────────────
 	var panel := Panel.new()
 	panel.size = Vector2(sz, sz)
@@ -113,16 +142,54 @@ func _create_3d_block(x: int, y: int, col: Color) -> Node2D:
 
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = col
-	sb.set_corner_radius_all(14)
-	sb.border_width_bottom = 5
-	sb.border_width_right = 5
-	sb.border_color = Color(col.r * 0.52, col.g * 0.52, col.b * 0.52, 1.0)
-	sb.shadow_color = Color(0.0, 0.0, 0.0, 0.40)
-	sb.shadow_size = 6
-	sb.shadow_offset = Vector2(0, 4)
+	
+	if is_diamond:
+		sb.set_corner_radius_all(6)
+		sb.border_width_bottom = 6
+		sb.border_width_right = 6
+		sb.border_width_top = 2
+		sb.border_width_left = 2
+		sb.border_color = col.lerp(Color.WHITE, 0.3)
+		sb.shadow_color = col
+		sb.shadow_size = 12
+		sb.shadow_offset = Vector2(0, 0)
+	elif is_premium:
+		sb.set_corner_radius_all(20)
+		sb.border_width_bottom = 4
+		sb.border_width_right = 4
+		sb.border_width_top = 2
+		sb.border_width_left = 2
+		sb.border_color = Color(col.r * 0.4, col.g * 0.4, col.b * 0.4, 1.0)
+		sb.shadow_color = Color(0.0, 0.0, 0.0, 0.60)
+		sb.shadow_size = 8
+		sb.shadow_offset = Vector2(0, 5)
+	else:
+		sb.set_corner_radius_all(14)
+		sb.border_width_bottom = 5
+		sb.border_width_right = 5
+		sb.border_color = Color(col.r * 0.52, col.g * 0.52, col.b * 0.52, 1.0)
+		sb.shadow_color = Color(0.0, 0.0, 0.0, 0.40)
+		sb.shadow_size = 6
+		sb.shadow_offset = Vector2(0, 4)
+		
 	sb.anti_aliasing = true
 	panel.add_theme_stylebox_override("panel", sb)
 	block.add_child(panel)
+
+	# Inner glow
+	if is_premium or is_diamond:
+		var inner := Panel.new()
+		inner.size = Vector2(sz - 8, sz - 8)
+		inner.position = Vector2(-hf + 4, -hf + 4)
+		inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var isb := StyleBoxFlat.new()
+		isb.bg_color = Color.TRANSPARENT
+		isb.border_width_all = 3
+		isb.border_color = Color(1.0, 1.0, 1.0, 0.25 if is_premium else 0.5)
+		isb.set_corner_radius_all(16 if is_premium and not is_diamond else 4)
+		isb.border_blend = true
+		inner.add_theme_stylebox_override("panel", isb)
+		block.add_child(inner)
 
 	# ── Top-Left Glossy Highlight Edge ─────────────────────────────────────
 	var highlight := Panel.new()
@@ -131,8 +198,8 @@ func _create_3d_block(x: int, y: int, col: Color) -> Node2D:
 	highlight.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var hsb := StyleBoxFlat.new()
-	hsb.bg_color = Color(1.0, 1.0, 1.0, 0.32)
-	hsb.set_corner_radius_all(8)
+	hsb.bg_color = Color(1.0, 1.0, 1.0, 0.5 if is_diamond else (0.4 if is_premium else 0.32))
+	hsb.set_corner_radius_all(8 if not is_diamond else 2)
 	hsb.anti_aliasing = true
 	highlight.add_theme_stylebox_override("panel", hsb)
 	block.add_child(highlight)
@@ -144,7 +211,7 @@ func _create_3d_block(x: int, y: int, col: Color) -> Node2D:
 	glint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var gsb := StyleBoxFlat.new()
-	gsb.bg_color = Color(1.0, 1.0, 1.0, 0.75)
+	gsb.bg_color = Color(1.0, 1.0, 1.0, 0.9 if is_diamond else (0.85 if is_premium else 0.75))
 	gsb.set_corner_radius_all(4)
 	gsb.anti_aliasing = true
 	glint.add_theme_stylebox_override("panel", gsb)

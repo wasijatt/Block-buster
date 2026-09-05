@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b3ol8t8krkngl" path="res://Main.gd" id="1_r0du0"]
 [ext_resource type="Script" uid="uid://d3unpl5o8xvlb" path="res://Grid.gd" id="2_cm0pq"]
-[ext_resource type="Texture2D" uid="uid://cusvlbb7mqwce" path="res://assets/bg_funky.jpg" id="3_bg"]
+[ext_resource type="Texture2D" uid="uid://b8rtbosqqqsh4" path="res://assets/bg_funky.png" id="3_bg"]
 [ext_resource type="Texture2D" uid="uid://dxgmrjjm8neel" path="res://assets/restart_icon.jpg" id="5_restart"]
 [ext_resource type="AudioStream" uid="uid://dwicfw8twitp7" path="res://sounds/click.wav" id="6_click"]
 [ext_resource type="AudioStream" uid="uid://clqi8eiqf6xjv" path="res://sounds/drop.wav" id="7_drop"]
@@ -13,90 +13,70 @@
 script = ExtResource("1_r0du0")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1742027741]
-offset_left = -39.0
-offset_top = -540.0
-offset_right = 681.0
-offset_bottom = 740.0
+offset_right = 720.0
+offset_bottom = 1280.0
 mouse_filter = 2
 color = Color(0.08, 0.08, 0.1, 1)
 
-[node name="ScoreLabel" type="Label" parent="." unique_id=1079887244]
-offset_top = 80.0
-offset_right = 720.0
-offset_bottom = 180.0
-theme_override_font_sizes/font_size = 64
-text = "Score: 0"
-horizontal_alignment = 1
-
 [node name="LevelInfoLabel" type="Label" parent="." unique_id=1079887245]
 visible = false
-offset_top = 20.0
+offset_top = 25.0
 offset_right = 720.0
-offset_bottom = 80.0
+offset_bottom = 70.0
 theme_override_font_sizes/font_size = 32
 text = "Level 1"
 horizontal_alignment = 1
 
+[node name="HighScoreLabel" type="Label" parent="." unique_id=1079887243]
+offset_top = 70.0
+offset_right = 720.0
+offset_bottom = 115.0
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 30
+text = "BEST: 0"
+horizontal_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=1079887244]
+offset_top = 115.0
+offset_right = 720.0
+offset_bottom = 195.0
+theme_override_font_sizes/font_size = 64
+text = "Score: 0"
+horizontal_alignment = 1
+
 [node name="TargetLabel" type="Label" parent="." unique_id=1079887246]
 visible = false
-offset_top = 160.0
+offset_top = 195.0
 offset_right = 720.0
-offset_bottom = 200.0
-theme_override_font_sizes/font_size = 24
+offset_bottom = 235.0
+theme_override_colors/font_color = Color(0.35, 0.95, 0.6, 1)
+theme_override_font_sizes/font_size = 26
 text = "Target: 500"
 horizontal_alignment = 1
 
 [node name="Grid" type="Node2D" parent="." unique_id=1245138694]
-position = Vector2(120, 240)
+position = Vector2(120, 245)
 script = ExtResource("2_cm0pq")
 
 [node name="Tray" type="Node2D" parent="." unique_id=607274034]
 
 [node name="GameOverLabel" type="Label" parent="." unique_id=603353504]
 visible = false
-offset_top = 450.0
-offset_right = 720.0
-offset_bottom = 650.0
-theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+z_index = 10
+offset_left = 80.0
+offset_top = 440.0
+offset_right = 640.0
+offset_bottom = 740.0
+theme_override_colors/font_color = Color(1, 0.38, 0.38, 1)
+theme_override_colors/font_shadow_color = Color(0.3, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 72
 text = "GAME OVER"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="RestartButton" type="Button" parent="GameOverLabel" unique_id=603353505]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -20.0
-offset_right = 100.0
-offset_bottom = 40.0
-grow_horizontal = 2
-grow_vertical = 0
-icon = ExtResource("5_restart")
-expand_icon = true
-
-[node name="LevelCompleteLabel" type="Label" parent="." unique_id=603353506]
-visible = false
-offset_top = 450.0
-offset_right = 720.0
-offset_bottom = 650.0
-theme_override_colors/font_color = Color(0.3, 1, 0.3, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 80
-text = "LEVEL CLEAR"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NextLevelButton" type="Button" parent="LevelCompleteLabel" unique_id=603353507]
+custom_minimum_size = Vector2(240, 80)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -104,12 +84,46 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -120.0
-offset_top = -20.0
+offset_top = -110.0
 offset_right = 120.0
-offset_bottom = 40.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 36
+text = "RETRY"
+icon = ExtResource("5_restart")
+expand_icon = true
+
+[node name="LevelCompleteLabel" type="Label" parent="." unique_id=603353506]
+visible = false
+z_index = 10
+offset_left = 80.0
+offset_top = 440.0
+offset_right = 640.0
+offset_bottom = 740.0
+theme_override_colors/font_color = Color(0.35, 0.95, 0.6, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.3, 0.1, 0.8)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 72
+text = "LEVEL CLEAR!"
+horizontal_alignment = 1
+
+[node name="NextLevelButton" type="Button" parent="LevelCompleteLabel" unique_id=603353507]
+custom_minimum_size = Vector2(240, 80)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -110.0
+offset_right = 120.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 36
 text = "NEXT LEVEL"
 
 [node name="WelcomeScreen" type="Control" parent="." unique_id=987654321]
@@ -127,10 +141,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -45.0
-offset_top = -511.0
-offset_right = -20.0
-offset_bottom = -521.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_bg")
@@ -141,44 +151,60 @@ stretch_mode = 6
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 300.0
-offset_bottom = 400.0
+offset_top = 220.0
+offset_bottom = 340.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.3, 0.6, 0.9, 1)
+theme_override_colors/font_color = Color(1.0, 0.78, 0.24, 1)
 theme_override_font_sizes/font_size = 80
 text = "BLOCK BUSTER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="HighScoreLabel" type="Label" parent="WelcomeScreen" unique_id=222222224]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 350.0
+offset_bottom = 420.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 36
+text = "HIGH SCORE: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ClassicButton" type="Button" parent="WelcomeScreen" unique_id=333333334]
+custom_minimum_size = Vector2(340, 90)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_right = 150.0
-offset_bottom = 80.0
+offset_left = -170.0
+offset_top = 20.0
+offset_right = 170.0
+offset_bottom = 110.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 44
 text = "CLASSIC"
 
 [node name="LevelsButton" type="Button" parent="WelcomeScreen" unique_id=333333335]
+custom_minimum_size = Vector2(340, 90)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = 100.0
-offset_right = 150.0
-offset_bottom = 180.0
+offset_left = -170.0
+offset_top = 135.0
+offset_right = 170.0
+offset_bottom = 225.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 44
 text = "LEVELS"
 
 [node name="LevelSelectionScreen" type="Control" parent="." unique_id=987654322]

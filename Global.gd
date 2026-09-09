@@ -427,6 +427,7 @@ const FRUIT_GEMS: Array[Dictionary] = [
 
 func _ready() -> void:
 	load_high_score()
+	load_settings()
 
 func load_high_score() -> int:
 	var config := ConfigFile.new()
@@ -442,8 +443,39 @@ func save_high_score(new_score: int) -> void:
 	if new_score > high_score:
 		high_score = max(0, new_score)
 		var config := ConfigFile.new()
+		config.load(SAVE_PATH)
 		config.set_value("game", "high_score", high_score)
 		config.save(SAVE_PATH)
+
+func reset_high_score() -> void:
+	high_score = 0
+	var config := ConfigFile.new()
+	config.load(SAVE_PATH)
+	config.set_value("game", "high_score", 0)
+	config.save(SAVE_PATH)
+
+# ── Settings (persisted in the same config file) ─────────────────────────────
+var sound_enabled: bool = true
+
+func load_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load(SAVE_PATH) == OK:
+		sound_enabled = bool(config.get_value("game", "sound_enabled", true))
+	_apply_sound_enabled()
+
+func set_sound_enabled(enabled: bool) -> void:
+	sound_enabled = enabled
+	_apply_sound_enabled()
+	var config := ConfigFile.new()
+	config.load(SAVE_PATH)
+	config.set_value("game", "sound_enabled", enabled)
+	config.save(SAVE_PATH)
+
+func _apply_sound_enabled() -> void:
+	# Single master-bus mute: covers every sound player with zero per-call cost
+	var master := AudioServer.get_bus_index("Master")
+	if master >= 0:
+		AudioServer.set_bus_mute(master, not sound_enabled)
 
 func get_random_fruit_theme() -> Dictionary:
 	return FRUIT_GEMS[randi() % FRUIT_GEMS.size()]

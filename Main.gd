@@ -12,8 +12,22 @@ extends Node2D
 # ── Modals & Screens ──────────────────────────────────────────────────────────
 @onready var welcome_screen: Control = $WelcomeScreen
 @onready var welcome_high_score_label: Label = $WelcomeScreen/HighScoreLabel
-@onready var classic_button: Button = $WelcomeScreen/ClassicButton
+@onready var play_button: Button = $WelcomeScreen/PlayButton
 @onready var levels_button: Button = $WelcomeScreen/LevelsButton
+@onready var trophy_button: Button = $WelcomeScreen/TrophyButton
+@onready var settings_button: Button = $WelcomeScreen/SettingsButton
+
+@onready var leaderboard_modal: Control = $LeaderboardModal
+@onready var leaderboard_card: Panel = $LeaderboardModal/Card
+@onready var leaderboard_best_label: Label = $LeaderboardModal/Card/BestLabel
+@onready var badge_list: VBoxContainer = $LeaderboardModal/Card/BadgeScroll/BadgeList
+@onready var leaderboard_close_btn: Button = $LeaderboardModal/Card/CloseButton
+
+@onready var settings_modal: Control = $SettingsModal
+@onready var settings_card: Panel = $SettingsModal/Card
+@onready var sound_toggle_btn: Button = $SettingsModal/Card/SoundButton
+@onready var reset_best_btn: Button = $SettingsModal/Card/ResetButton
+@onready var settings_close_btn: Button = $SettingsModal/Card/CloseButton
 
 @onready var level_selection_screen: Control = $LevelSelectionScreen
 @onready var back_button: Button = $LevelSelectionScreen/BackButton
@@ -49,6 +63,7 @@ var target_score: int = 0
 var level_completed: bool = false
 
 const PIECE_SCENE := preload("res://Piece.tscn")
+const PLAY_PANEL_TEX := preload("res://assets/icons/panel_coral.png")
 const LEVEL_MAP_CHUNK_SIZE := 5
 
 var tray_slots: Array = [null, null, null]
@@ -81,20 +96,37 @@ func _ready() -> void:
 
 	game_over_modal.visible = false
 	level_complete_modal.visible = false
+	leaderboard_modal.visible = false
+	settings_modal.visible = false
 	welcome_screen.visible = true
+	_fade_in_screen(welcome_screen)
 
 	grid.lines_cleared.connect(_on_lines_cleared)
 
 	# Button Signals
-	classic_button.pressed.connect(_on_classic_pressed)
+	play_button.pressed.connect(_on_classic_pressed)
 	levels_button.pressed.connect(_on_levels_pressed)
+	trophy_button.pressed.connect(_on_trophy_pressed)
+	settings_button.pressed.connect(_on_settings_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	hud_back_button.pressed.connect(_handle_back_navigation)
 
-	classic_button.pressed.connect(play_click)
+	leaderboard_close_btn.pressed.connect(_on_popup_close_pressed)
+	settings_close_btn.pressed.connect(_on_popup_close_pressed)
+	sound_toggle_btn.toggled.connect(_on_sound_toggled)
+	reset_best_btn.pressed.connect(_on_reset_best_pressed)
+	sound_toggle_btn.button_pressed = Global.sound_enabled
+	sound_toggle_btn.text = "SOUND: ON" if Global.sound_enabled else "SOUND: OFF"
+
+	play_button.pressed.connect(play_click)
 	levels_button.pressed.connect(play_click)
+	trophy_button.pressed.connect(play_click)
+	settings_button.pressed.connect(play_click)
 	back_button.pressed.connect(play_click)
 	hud_back_button.pressed.connect(play_click)
+	leaderboard_close_btn.pressed.connect(play_click)
+	settings_close_btn.pressed.connect(play_click)
+	reset_best_btn.pressed.connect(play_click)
 
 	game_over_restart_btn.pressed.connect(play_click)
 	game_over_restart_btn.pressed.connect(start_game)
@@ -159,6 +191,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_back_navigation()
 
 func _handle_back_navigation() -> void:
+	# 0. Menu popups (close first)
+	if leaderboard_modal.visible or settings_modal.visible:
+		_close_popups()
+		return
+
 	# 1. Modals (Dismiss first)
 	if game_over_modal.visible:
 		game_over_modal.visible = false
@@ -183,6 +220,7 @@ func _handle_back_navigation() -> void:
 			_on_levels_pressed()
 		else:
 			welcome_screen.visible = true
+			_fade_in_screen(welcome_screen)
 		return
 
 	# 4. Root Welcome Screen -> Exit app cleanly
@@ -212,21 +250,31 @@ func _update_responsive_layout() -> void:
 			welcome_high_score_label.position = Vector2(0, max(225.0, vp.y * 0.20 + 105.0))
 			welcome_high_score_label.size = Vector2(vp.x, 60.0)
 			
-		var btn_w: float = min(420.0, vp.x * 0.78)
-		var btn_h: float = 96.0
+		# Primary PLAY button (big coral gradient CTA)
+		var btn_w: float = min(460.0, vp.x * 0.80)
+		var btn_h: float = 110.0
 		var btn_x: float = (vp.x - btn_w) * 0.5
-		var btn_classic_y: float = max(380.0, vp.y * 0.52)
-		var btn_levels_y: float = btn_classic_y + btn_h + 24.0
-		
-		if classic_button:
-			classic_button.size = Vector2(btn_w, btn_h)
-			classic_button.position = Vector2(btn_x, btn_classic_y)
-			classic_button.pivot_offset = Vector2(btn_w * 0.5, btn_h * 0.5)
-			
-		if levels_button:
-			levels_button.size = Vector2(btn_w, btn_h)
-			levels_button.position = Vector2(btn_x, btn_levels_y)
-			levels_button.pivot_offset = Vector2(btn_w * 0.5, btn_h * 0.5)
+		var btn_play_y: float = max(430.0, vp.y * 0.50)
+
+		if play_button:
+			play_button.size = Vector2(btn_w, btn_h)
+			play_button.position = Vector2(btn_x, btn_play_y)
+			play_button.pivot_offset = Vector2(btn_w * 0.5, btn_h * 0.5)
+
+		# Circular icon-button row: Levels | Trophy | Settings
+		var icon_size: float = 110.0
+		var icon_gap: float = 44.0
+		var row_w: float = icon_size * 3.0 + icon_gap * 2.0
+		var row_x: float = (vp.x - row_w) * 0.5
+		var row_y: float = btn_play_y + btn_h + 46.0
+		var icon_buttons: Array[Button] = [levels_button, trophy_button, settings_button]
+		for i in icon_buttons.size():
+			var icon_btn := icon_buttons[i]
+			if icon_btn == null:
+				continue
+			icon_btn.size = Vector2(icon_size, icon_size)
+			icon_btn.position = Vector2(row_x + i * (icon_size + icon_gap), row_y)
+			icon_btn.pivot_offset = Vector2(icon_size * 0.5, icon_size * 0.5)
 
 	if level_selection_screen:
 		level_selection_screen.position = Vector2.ZERO
@@ -241,6 +289,12 @@ func _update_responsive_layout() -> void:
 	if level_complete_modal:
 		level_complete_modal.position = Vector2.ZERO
 		level_complete_modal.size = vp
+	if leaderboard_modal:
+		leaderboard_modal.position = Vector2.ZERO
+		leaderboard_modal.size = vp
+	if settings_modal:
+		settings_modal.position = Vector2.ZERO
+		settings_modal.size = vp
 
 	# ── Clean Non-Overlapping Gameplay Header Layout ───────────────────────────
 	var header_total_h: float = 135.0
@@ -342,8 +396,14 @@ func _apply_visual_theme() -> void:
 	_style_modal_card(level_complete_card, Color(0.08, 0.13, 0.12, 0.96), Color(0.25, 0.85, 0.52, 0.85), Color(0.25, 0.85, 0.52, 0.4))
 
 	# ── Custom 3D Button Styling ──────────────────────────────────────────────
-	_style_3d_button(classic_button, Color(0.98, 0.55, 0.18), Color(0.72, 0.28, 0.05), 26)
-	_style_3d_button(levels_button, Color(0.16, 0.78, 0.45), Color(0.08, 0.48, 0.25), 26)
+	_style_play_button(play_button)
+	_style_circle_button(levels_button, Color(0.18, 0.77, 0.71), Color(0.06, 0.42, 0.40))
+	_style_circle_button(trophy_button, Color(1.00, 0.79, 0.24), Color(0.60, 0.40, 0.05))
+	_style_circle_button(settings_button, Color(0.38, 0.33, 0.70), Color(0.18, 0.15, 0.40))
+	_style_3d_button(sound_toggle_btn, Color(0.18, 0.77, 0.71), Color(0.06, 0.42, 0.40), 22)
+	_style_3d_button(reset_best_btn, Color(0.92, 0.28, 0.32), Color(0.60, 0.12, 0.15), 22)
+	_style_3d_button(leaderboard_close_btn, Color(0.38, 0.35, 0.65), Color(0.22, 0.20, 0.42), 22)
+	_style_3d_button(settings_close_btn, Color(0.38, 0.35, 0.65), Color(0.22, 0.20, 0.42), 22)
 	_style_3d_button(back_button, Color(0.38, 0.35, 0.65), Color(0.22, 0.20, 0.42), 20)
 	_style_3d_button(hud_back_button, Color(0.38, 0.35, 0.65), Color(0.22, 0.20, 0.42), 18)
 
@@ -353,8 +413,14 @@ func _apply_visual_theme() -> void:
 	_style_3d_button(level_complete_next_btn, Color(0.18, 0.85, 0.48), Color(0.08, 0.52, 0.28), 24)
 	_style_3d_button(level_complete_home_btn, Color(0.38, 0.35, 0.65), Color(0.22, 0.20, 0.42), 24)
 
-	_setup_button_juice(classic_button)
+	_setup_button_juice(play_button)
 	_setup_button_juice(levels_button)
+	_setup_button_juice(trophy_button)
+	_setup_button_juice(settings_button)
+	_setup_button_juice(sound_toggle_btn)
+	_setup_button_juice(reset_best_btn)
+	_setup_button_juice(leaderboard_close_btn)
+	_setup_button_juice(settings_close_btn)
 	_setup_button_juice(back_button)
 	_setup_button_juice(hud_back_button)
 	_setup_button_juice(game_over_restart_btn)
@@ -497,6 +563,131 @@ func _setup_button_juice(btn: Button) -> void:
 		tw.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tw.tween_property(btn, "scale", Vector2.ONE, 0.12)
 	)
+
+func _style_play_button(btn: Button) -> void:
+	if btn == null:
+		return
+
+	btn.pivot_offset = btn.size / 2.0
+
+	# Coral gradient panel (baked texture, GPU-cheap) with glow shadow
+	var norm := StyleBoxTexture.new()
+	norm.texture = PLAY_PANEL_TEX
+	norm.region_rect = Rect2(Vector2.ZERO, PLAY_PANEL_TEX.get_size())
+	norm.shadow_color = Color(0.95, 0.35, 0.40, 0.45)
+	norm.shadow_size = 16
+	norm.shadow_offset = Vector2(0, 8)
+
+	var hov: StyleBoxTexture = norm.duplicate()
+	hov.modulate_color = Color(1.10, 1.06, 1.06, 1.0)
+
+	var press: StyleBoxTexture = norm.duplicate()
+	press.modulate_color = Color(0.82, 0.82, 0.82, 1.0)
+	press.shadow_size = 6
+	press.shadow_offset = Vector2(0, 3)
+
+	btn.add_theme_stylebox_override("normal", norm)
+	btn.add_theme_stylebox_override("hover", hov)
+	btn.add_theme_stylebox_override("pressed", press)
+	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+	btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	btn.add_theme_color_override("font_shadow_color", Color(0.45, 0.05, 0.15, 0.8))
+	btn.add_theme_constant_override("shadow_offset_x", 2)
+	btn.add_theme_constant_override("shadow_offset_y", 3)
+
+func _style_circle_button(btn: Button, main_color: Color, bevel_color: Color) -> void:
+	if btn == null:
+		return
+
+	btn.pivot_offset = btn.size / 2.0
+
+	var norm := StyleBoxFlat.new()
+	norm.bg_color = main_color
+	norm.set_corner_radius_all(64)
+	norm.set_content_margin_all(24.0)
+	norm.border_width_bottom = 6
+	norm.border_color = bevel_color
+	norm.shadow_color = Color(0, 0, 0, 0.45)
+	norm.shadow_size = 10
+	norm.shadow_offset = Vector2(0, 6)
+
+	var hov: StyleBoxFlat = norm.duplicate()
+	hov.bg_color = main_color.lightened(0.12)
+
+	var press: StyleBoxFlat = norm.duplicate()
+	press.bg_color = main_color.darkened(0.18)
+	press.border_width_bottom = 2
+	press.shadow_size = 4
+	press.shadow_offset = Vector2(0, 2)
+
+	btn.add_theme_stylebox_override("normal", norm)
+	btn.add_theme_stylebox_override("hover", hov)
+	btn.add_theme_stylebox_override("pressed", press)
+	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+# ── Snappy screen/modal transitions (all ≤ 0.3 s) ─────────────────────────────
+func _fade_in_screen(screen: Control) -> void:
+	if screen == null:
+		return
+	screen.modulate.a = 0.0
+	var tw := create_tween()
+	tw.tween_property(screen, "modulate:a", 1.0, 0.22) \
+		.set_trans(Tween.TRANS_QUAD) \
+		.set_ease(Tween.EASE_OUT)
+
+func _pop_in_modal(modal: Control, card: Control) -> void:
+	modal.visible = true
+	modal.modulate.a = 0.0
+	var card_size := card.size if card.size.x > 0.0 else card.custom_minimum_size
+	card.pivot_offset = card_size * 0.5
+	card.scale = Vector2(0.86, 0.86)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(modal, "modulate:a", 1.0, 0.15)
+	tw.tween_property(card, "scale", Vector2.ONE, 0.28) \
+		.set_trans(Tween.TRANS_BACK) \
+		.set_ease(Tween.EASE_OUT)
+
+func _close_popups() -> void:
+	leaderboard_modal.visible = false
+	settings_modal.visible = false
+
+# ── Menu Popups: Leaderboard & Settings ───────────────────────────────────────
+func _on_trophy_pressed() -> void:
+	_populate_leaderboard()
+	_pop_in_modal(leaderboard_modal, leaderboard_card)
+
+func _populate_leaderboard() -> void:
+	leaderboard_best_label.text = "BEST: %d" % Global.high_score
+	for child in badge_list.get_children():
+		child.queue_free()
+	for badge in Global.BADGES:
+		var row := Label.new()
+		row.add_theme_font_size_override("font_size", 30)
+		if LevelManager.unlocked_level >= int(badge.level):
+			row.text = "%s — Lv.%d" % [badge.name, badge.level]
+			row.add_theme_color_override("font_color", badge.color)
+		else:
+			row.text = "🔒 Reach Lv.%d" % badge.level
+			row.add_theme_color_override("font_color", Color(0.55, 0.53, 0.65))
+		badge_list.add_child(row)
+
+func _on_settings_pressed() -> void:
+	_pop_in_modal(settings_modal, settings_card)
+
+func _on_sound_toggled(pressed: bool) -> void:
+	Global.set_sound_enabled(pressed)
+	sound_toggle_btn.text = "SOUND: ON" if pressed else "SOUND: OFF"
+
+func _on_reset_best_pressed() -> void:
+	Global.reset_high_score()
+	_update_high_score_display()
+	if leaderboard_modal.visible:
+		_populate_leaderboard()
+
+func _on_popup_close_pressed() -> void:
+	_close_popups()
 
 func _reset_tray_panel_style() -> void:
 	if tray_panel == null:
@@ -749,6 +940,7 @@ func _on_levels_pressed() -> void:
 	_populate_level_grid()
 	welcome_screen.visible = false
 	level_selection_screen.visible = true
+	_fade_in_screen(level_selection_screen)
 	_set_gameplay_ui_visible(false)
 
 	# Auto-scroll directly to the player's current unlocked level
@@ -768,6 +960,7 @@ func _on_back_pressed() -> void:
 	AdsManager.set_banner_visible(true)
 	level_selection_screen.visible = false
 	welcome_screen.visible = true
+	_fade_in_screen(welcome_screen)
 	_set_gameplay_ui_visible(false)
 
 func _on_home_pressed() -> void:
@@ -777,6 +970,7 @@ func _on_home_pressed() -> void:
 	level_complete_modal.visible = false
 	_set_gameplay_ui_visible(false)
 	welcome_screen.visible = true
+	_fade_in_screen(welcome_screen)
 
 func start_level(lvl: int) -> void:
 	current_level = lvl

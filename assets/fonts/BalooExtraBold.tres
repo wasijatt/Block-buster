@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://c_baloo_extrabold"]
+
+[ext_resource type="FontFile" uid="uid://bhwlykbbgf81n" path="res://assets/fonts/Baloo2/Baloo2.ttf" id="1_baloo"]
+
+[resource]
+base_font = ExtResource("1_baloo")
+variation_opentype = {2003265652: 800}

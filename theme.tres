@@ -1,6 +1,7 @@
-[gd_resource type="Theme" load_steps=9 format=3 uid="uid://c_global_game_theme"]
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://c_global_game_theme"]
 
 [ext_resource type="FontFile" uid="uid://c07diw6grn8go" path="res://assets/fonts/Fredoka.ttf" id="1_font"]
+[ext_resource type="FontVariation" uid="uid://c_baloo_extrabold" path="res://assets/fonts/BalooExtraBold.tres" id="2_baloo"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hidden"]
 
@@ -111,7 +112,7 @@ Button/colors/font_shadow_color = Color(0.15, 0.05, 0.0, 0.7)
 Button/constants/shadow_offset_x = 2
 Button/constants/shadow_offset_y = 2
 Button/font_sizes/font_size = 36
-Button/fonts/font = ExtResource("1_font")
+Button/fonts/font = ExtResource("2_baloo")
 Button/styles/normal = SubResource("StyleBoxFlat_btn_normal")
 Button/styles/hover = SubResource("StyleBoxFlat_btn_hover")
 Button/styles/pressed = SubResource("StyleBoxFlat_btn_pressed")

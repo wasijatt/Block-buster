@@ -3,8 +3,42 @@
 [ext_resource type="Script" uid="uid://c_splash_script" path="res://Splash.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://anim_bg_scene_uid" path="res://AnimatedBackground.tscn" id="2_anim_bg"]
 [ext_resource type="Texture2D" uid="uid://c_logo_tex_uid" path="res://assets/logo.png" id="3_logo"]
+[ext_resource type="Texture2D" uid="uid://c_part_tex_uid" path="res://assets/particle_block.png" id="4_part_tex"]
 
-[node name="Splash" type="Control" unique_id=990022001]
+[sub_resource type="Gradient" id="Gradient_flash"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(1, 1, 1, 0.95, 1, 0.85, 0.5, 0.5, 1, 0.75, 0.4, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_flash"]
+gradient = SubResource("Gradient_flash")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+width = 256
+height = 256
+
+[sub_resource type="Gradient" id="Gradient_burst"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(1, 0.96, 0.8, 1, 1, 0.72, 0.32, 0.9, 1, 0.42, 0.38, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_burst"]
+gradient = SubResource("Gradient_burst")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_burst"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 24.0
+angle_min = -180.0
+angle_max = 180.0
+spread = 180.0
+initial_velocity_min = 380.0
+initial_velocity_max = 680.0
+gravity = Vector3(0, 260, 0)
+scale_min = 0.35
+scale_max = 0.9
+color_ramp = SubResource("GradientTexture1D_burst")
+
+[node name="Splash" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +49,51 @@ script = ExtResource("1_script")
 
 [node name="AnimatedBackground" parent="." instance=ExtResource("2_anim_bg")]
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Logo" type="Sprite2D" parent="." unique_id=990022002]
-position = Vector2(360, 640)
+[node name="Logo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = 48.0
+offset_right = -48.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ImpactFlash" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -260.0
+offset_right = 260.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_flash")
+expand_mode = 1
+
+[node name="ImpactBurst" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 26
+lifetime = 0.6
+one_shot = true
+explosiveness = 1.0
+texture = ExtResource("4_part_tex")
+process_material = SubResource("ParticleProcessMaterial_burst")

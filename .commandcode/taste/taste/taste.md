@@ -1,0 +1,13 @@
+# Taste
+- Builds a 2D block-puzzle game in Godot 4 with GDScript, targeting Android; performance on low-end devices is a hard constraint for every change. Confidence: 0.95
+- Wants effects kept GPU-based — Tween, shaders, and GPUParticles2D only; explicitly rejects video playback and heavy per-frame calculations. Confidence: 0.9
+- Logo and artwork must never be stretched or cropped in a way that distorts or hides content (including text baked into the image): preserve aspect ratio, fit with padding, keep centered, and verify against 19.5:9 and 18:9 Android aspect ratios. Confidence: 0.9
+- Wants every scene transition and UI interaction to feel snappy: nothing longer than ~0.3–0.4s, with the one-time splash intro capped at 1.5–2s total. Confidence: 0.95
+- Prefers punchy entrances over slow fades — quick scale-up with overshoot bounce (Tween.TRANS_BACK / TRANS_ELASTIC, EASE_OUT, ~0.4–0.5s) plus a radial flash or small particle burst timed to the exact landing frame for "impact". Confidence: 0.85
+- Dislikes slow crossfades and long, boring intros; wants the animated shader/particle background running as a true full-screen layer behind splash and menus so there is never blank padding and the look is consistent from first frame to gameplay. Confidence: 0.85
+- Color palette: coral, teal, and gold on deep indigo. Confidence: 0.9
+- UI aesthetic: rounded, colorful icon-based buttons with a soft circular/rounded-square gradient panel behind each icon, simple flat icons that stay legible at small sizes, and a subtle press-down scale tween for tactile feedback. Confidence: 0.85
+- Typography: "Baloo 2" (Bold/ExtraBold) for every heading, title, score label, and button label; a clean readable font for body/secondary text only. Confidence: 0.9
+- Wants styling centralized in Godot Theme / DynamicFont (FontVariation) resources so it applies everywhere automatically, rather than configuring fonts or styles per node by hand. Confidence: 0.9
+- Wants an explicit list of exactly which scenes and scripts were created or modified after a multi-file change. Confidence: 0.9
+- Wants key timing/tuning values explained and surfaced as named, easily editable constants so they can fine-tune them later without digging through code. Confidence: 0.9

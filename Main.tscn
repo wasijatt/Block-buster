@@ -11,6 +11,12 @@
 [ext_resource type="AudioStream" uid="uid://rthj74pv5s3f" path="res://sounds/combo.wav" id="11_combo"]
 [ext_resource type="AudioStream" uid="uid://e380l2kuqkma" path="res://sounds/badge.wav" id="12_badge"]
 [ext_resource type="AudioStream" uid="uid://b0cdjeggkotfk" path="res://sounds/invalid.wav" id="13_invalid"]
+[ext_resource type="FontVariation" uid="uid://c_baloo_extrabold" path="res://assets/fonts/BalooExtraBold.tres" id="14_baloo"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_play.png" id="15_icon_play"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_grid.png" id="16_icon_grid"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_trophy.png" id="17_icon_trophy"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_settings.png" id="18_icon_settings"]
+[ext_resource type="Texture2D" path="res://assets/icons/panel_coral.png" id="19_panel_coral"]
 
 [node name="Main" type="Node2D" unique_id=654678731]
 script = ExtResource("1_r0du0")
@@ -22,6 +28,7 @@ anchors_preset = 0
 offset_top = 25.0
 offset_right = 720.0
 offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 32
 text = "Level 1"
 horizontal_alignment = 1
@@ -31,6 +38,7 @@ offset_top = 70.0
 offset_right = 720.0
 offset_bottom = 115.0
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 30
 text = "BEST: 0"
 horizontal_alignment = 1
@@ -39,6 +47,7 @@ horizontal_alignment = 1
 offset_top = 115.0
 offset_right = 720.0
 offset_bottom = 195.0
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 64
 text = "Score: 0"
 horizontal_alignment = 1
@@ -110,6 +119,7 @@ theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
 theme_override_colors/font_shadow_color = Color(0.5, 0.05, 0.05, 0.85)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 64
 text = "GAME OVER"
 horizontal_alignment = 1
@@ -138,6 +148,7 @@ theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 68
 text = "0"
 horizontal_alignment = 1
@@ -214,6 +225,7 @@ theme_override_colors/font_color = Color(0.35, 0.95, 0.6, 1)
 theme_override_colors/font_shadow_color = Color(0.05, 0.35, 0.15, 0.85)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 58
 text = "LEVEL CLEAR!"
 horizontal_alignment = 1
@@ -242,6 +254,7 @@ theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 64
 text = "Score: 0"
 horizontal_alignment = 1
@@ -290,6 +303,7 @@ offset_top = 260.0
 offset_right = 720.0
 offset_bottom = 380.0
 theme_override_colors/font_color = Color(1, 0.78, 0.24, 1)
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 84
 text = "BLOCK BUSTER"
 horizontal_alignment = 1
@@ -301,30 +315,55 @@ offset_top = 380.0
 offset_right = 720.0
 offset_bottom = 450.0
 theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 42
 text = "🏆 HIGH SCORE: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ClassicButton" type="Button" parent="WelcomeScreen" unique_id=333333334]
-custom_minimum_size = Vector2(360, 96)
+[node name="PlayButton" type="Button" parent="WelcomeScreen" unique_id=333333334]
+custom_minimum_size = Vector2(440, 110)
 layout_mode = 1
-offset_left = 180.0
-offset_top = 680.0
-offset_right = 540.0
-offset_bottom = 776.0
-theme_override_font_sizes/font_size = 44
-text = "CLASSIC"
+offset_left = 140.0
+offset_top = 660.0
+offset_right = 580.0
+offset_bottom = 770.0
+theme_override_font_sizes/font_size = 52
+text = "PLAY"
+icon = ExtResource("15_icon_play")
 
 [node name="LevelsButton" type="Button" parent="WelcomeScreen" unique_id=333333335]
-custom_minimum_size = Vector2(360, 96)
+custom_minimum_size = Vector2(110, 110)
 layout_mode = 1
-offset_left = 180.0
-offset_top = 800.0
-offset_right = 540.0
-offset_bottom = 896.0
-theme_override_font_sizes/font_size = 44
-text = "LEVELS"
+offset_left = 130.0
+offset_top = 810.0
+offset_right = 240.0
+offset_bottom = 920.0
+tooltip_text = "Level Map"
+icon = ExtResource("16_icon_grid")
+expand_icon = true
+
+[node name="TrophyButton" type="Button" parent="WelcomeScreen" unique_id=333333339]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 1
+offset_left = 305.0
+offset_top = 810.0
+offset_right = 415.0
+offset_bottom = 920.0
+tooltip_text = "Leaderboard"
+icon = ExtResource("17_icon_trophy")
+expand_icon = true
+
+[node name="SettingsButton" type="Button" parent="WelcomeScreen" unique_id=333333340]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 1
+offset_left = 480.0
+offset_top = 810.0
+offset_right = 590.0
+offset_bottom = 920.0
+tooltip_text = "Settings"
+icon = ExtResource("18_icon_settings")
+expand_icon = true
 
 [node name="LevelSelectionScreen" type="Control" parent="." unique_id=987654322]
 visible = false
@@ -357,6 +396,7 @@ theme_override_colors/font_color = Color(1, 0.95, 0.4, 1)
 theme_override_colors/font_shadow_color = Color(0.2, 0.1, 0.3, 0.8)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 5
+theme_override_fonts/font = ExtResource("14_baloo")
 theme_override_font_sizes/font_size = 72
 text = "SELECT LEVEL"
 horizontal_alignment = 1
@@ -410,3 +450,185 @@ stream = ExtResource("12_badge")
 
 [node name="InvalidSound" type="AudioStreamPlayer" parent="." unique_id=444444448]
 stream = ExtResource("13_invalid")
+
+[node name="LeaderboardModal" type="Control" parent="." unique_id=555555551]
+visible = false
+z_index = 60
+layout_mode = 3
+anchors_preset = 0
+offset_right = 720.0
+offset_bottom = 1280.0
+
+[node name="Dimmer" type="ColorRect" parent="LeaderboardModal" unique_id=555555552]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.04, 0.09, 0.85)
+
+[node name="Card" type="Panel" parent="LeaderboardModal" unique_id=555555553]
+custom_minimum_size = Vector2(560, 620)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -310.0
+offset_right = 280.0
+offset_bottom = 310.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="LeaderboardModal/Card" unique_id=555555554]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 28.0
+offset_bottom = 92.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_fonts/font = ExtResource("14_baloo")
+theme_override_font_sizes/font_size = 48
+text = "🏆 BEST & BADGES"
+horizontal_alignment = 1
+
+[node name="BestLabel" type="Label" parent="LeaderboardModal/Card" unique_id=555555555]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 100.0
+offset_bottom = 160.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.95, 0.6, 1)
+theme_override_fonts/font = ExtResource("14_baloo")
+theme_override_font_sizes/font_size = 44
+text = "0"
+horizontal_alignment = 1
+
+[node name="BadgeScroll" type="ScrollContainer" parent="LeaderboardModal/Card" unique_id=555555556]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 178.0
+offset_right = -28.0
+offset_bottom = -118.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="BadgeList" type="VBoxContainer" parent="LeaderboardModal/Card/BadgeScroll" unique_id=555555557]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CloseButton" type="Button" parent="LeaderboardModal/Card" unique_id=555555558]
+custom_minimum_size = Vector2(220, 76)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -98.0
+offset_right = 110.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = "CLOSE"
+
+[node name="SettingsModal" type="Control" parent="." unique_id=555555561]
+visible = false
+z_index = 60
+layout_mode = 3
+anchors_preset = 0
+offset_right = 720.0
+offset_bottom = 1280.0
+
+[node name="Dimmer" type="ColorRect" parent="SettingsModal" unique_id=555555562]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.04, 0.09, 0.85)
+
+[node name="Card" type="Panel" parent="SettingsModal" unique_id=555555563]
+custom_minimum_size = Vector2(560, 480)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -240.0
+offset_right = 280.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="SettingsModal/Card" unique_id=555555564]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 28.0
+offset_bottom = 92.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.65, 0.9, 1, 1)
+theme_override_fonts/font = ExtResource("14_baloo")
+theme_override_font_sizes/font_size = 48
+text = "⚙ SETTINGS"
+horizontal_alignment = 1
+
+[node name="SoundButton" type="Button" parent="SettingsModal/Card" unique_id=555555565]
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 80.0
+offset_top = 120.0
+offset_right = -80.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+toggle_mode = true
+text = "SOUND: ON"
+
+[node name="ResetButton" type="Button" parent="SettingsModal/Card" unique_id=555555566]
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 80.0
+offset_top = 218.0
+offset_right = -80.0
+offset_bottom = 298.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 30
+text = "RESET BEST SCORE"
+
+[node name="CloseButton" type="Button" parent="SettingsModal/Card" unique_id=555555567]
+custom_minimum_size = Vector2(220, 76)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -98.0
+offset_right = 110.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = "CLOSE"

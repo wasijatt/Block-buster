@@ -13,7 +13,16 @@
       "Shell({:*)",
       "Shell(Select-Object:*)",
       "Shell(powershell -NoProfile -Command \"if (Test-Path 'assets/fonts/Baloo2/Baloo2.ttf') { $f = Get-Item 'assets/fonts/Baloo2/Baloo2.ttf'; Write-Host ('size=' + $f.Length); $bytes = [System.IO.File]::ReadAllBytes($f.FullName)[0..3]; Write-Host ('magic=' + [System.Text.Encoding]::ASCII.GetString($bytes)) } else { Write-Host 'file missing' }\")",
-      "Shell(powershell -NoProfile -Command =[IO.File]::ReadAllBytes('C:\\Users\\Waseem\\Desktop\\Block-buster\\assets\\fonts\\Baloo2\\Baloo2.ttf'); Write-Host ('magic=' + [Text.Encoding]::ASCII.GetString([0..3]) + ' size=' + .Length); Get-Item 'assets/fonts/Baloo2/*' | Select-Object Name, Length | Format-Table -AutoSize)"
+      "Shell(powershell -NoProfile -Command =[IO.File]::ReadAllBytes('C:\\Users\\Waseem\\Desktop\\Block-buster\\assets\\fonts\\Baloo2\\Baloo2.ttf'); Write-Host ('magic=' + [Text.Encoding]::ASCII.GetString([0..3]) + ' size=' + .Length); Get-Item 'assets/fonts/Baloo2/*' | Select-Object Name, Length | Format-Table -AutoSize)",
+      "Shell(powershell -NoProfile -Command \"Add-Type -AssemblyName System.Drawing; $img=[System.Drawing.Image]::FromFile('C:\\Users\\Waseem\\Desktop\\Block-buster\\assets\\logo.png'); Write-Output ('logo.png: '+$img.Width+'x'+$img.Height); $img.Dispose()\")",
+      "Shell(powershell -NoProfile -Command \"$b=[IO.File]::ReadAllBytes('C:\\Users\\Waseem\\Desktop\\Block-buster\\assets\\fonts\\Baloo2\\Baloo2.ttf'); Write-Output ('size='+$b.Length); $n=($b[4]*256+$b[5]); $found=$false; for($i=0;$i -lt $n;$i++){$o=12+$i*16; $tag=[Text.Encoding]::ASCII.GetString($b,$o,4); if($tag -eq 'fvar'){$found=$true}}; Write-Output ('variable font (fvar): '+$found)\")",
+      "Shell(powershell -NoProfile -ExecutionPolicy Bypass -File generate_icons.ps1)",
+      "Shell(where godot godot4 Godot 2>nul & echo ---)",
+      "Shell(powershell -NoProfile -Command \"Get-ChildItem 'C:\\Program Files','C:\\Users\\Waseem\\Desktop','C:\\Users\\Waseem\\Downloads','C:\\Godot' -Filter '*odot*' -ErrorAction SilentlyContinue | Select-Object -First 10 FullName\")",
+      "Shell(powershell -NoProfile -Command \"Get-ChildItem 'C:\\Users\\Waseem' -Recurse -Depth 3 -Filter 'Godot*.exe' -ErrorAction SilentlyContinue | Select-Object -First 5 FullName\")",
+      "Shell(powershell -NoProfile -Command \"Get-ChildItem \\\"$env:APPDATA\\Godot\\\" -Recurse -Depth 2 -ErrorAction SilentlyContinue | Select-Object -First 30 FullName; Get-ChildItem 'D:\\','E:\\' -Filter '*odot*' -ErrorAction SilentlyContinue | Select-Object FullName\")",
+      "Shell(powershell -NoProfile -Command \"$sh=New-Object -ComObject WScript.Shell; Get-ChildItem \\\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\\",\\\"$env:ProgramData\\Microsoft\\Windows\\Start Menu\\\",\\\"$env:USERPROFILE\\Desktop\\\" -Recurse -Filter '*.lnk' -ErrorAction SilentlyContinue | ForEach-Object { $t=$sh.CreateShortcut($_.FullName).TargetPath; if($t -match 'odot'){ $t } }\")",
+      "Shell(powershell -NoProfile -Command \"Get-ItemProperty 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*','HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' -ErrorAction SilentlyContinue | Where-Object { $_.DisplayName -match 'Godot' } | Select-Object DisplayName, InstallLocation; Get-PSDrive -PSProvider FileSystem | Select-Object -ExpandProperty Root\")"
     ],
     "deny": [],
     "defaultMode": "default"

@@ -1,3 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Release artifacts and signing credentials must stay outside version control.
+*.apk
+*.aab
+*.keystore
+*.jks

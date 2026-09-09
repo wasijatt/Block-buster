@@ -1,23 +1,22 @@
 [gd_scene format=3 uid="uid://qp5u4i7wl5fe"]
 
 [ext_resource type="Script" uid="uid://b3ol8t8krkngl" path="res://Main.gd" id="1_r0du0"]
+[ext_resource type="PackedScene" path="res://AnimatedBackground.tscn" id="2_anim_bg"]
 [ext_resource type="Script" uid="uid://d3unpl5o8xvlb" path="res://Grid.gd" id="2_cm0pq"]
-[ext_resource type="PackedScene" uid="uid://anim_bg_scene_uid" path="res://AnimatedBackground.tscn" id="2_anim_bg"]
-[ext_resource type="Texture2D" uid="uid://dxgmrjjm8neel" path="res://assets/restart_icon.jpg" id="5_restart"]
 [ext_resource type="AudioStream" uid="uid://dwicfw8twitp7" path="res://sounds/click.wav" id="6_click"]
 [ext_resource type="AudioStream" uid="uid://clqi8eiqf6xjv" path="res://sounds/drop.wav" id="7_drop"]
 [ext_resource type="AudioStream" uid="uid://yeu6mowg6hxq" path="res://sounds/clear.wav" id="8_clear"]
 [ext_resource type="AudioStream" uid="uid://uhph7ms5i0xi" path="res://sounds/game_over.wav" id="9_gameover"]
-[ext_resource type="AudioStream" uid="uid://c_snd_pickup_uid" path="res://sounds/pickup.wav" id="10_pickup"]
-[ext_resource type="AudioStream" uid="uid://c_snd_combo_uid" path="res://sounds/combo.wav" id="11_combo"]
-[ext_resource type="AudioStream" uid="uid://c_snd_badge_uid" path="res://sounds/badge.wav" id="12_badge"]
-[ext_resource type="AudioStream" uid="uid://c_snd_invalid_uid" path="res://sounds/invalid.wav" id="13_invalid"]
+[ext_resource type="AudioStream" uid="uid://doypxpekcovon" path="res://sounds/pickup.wav" id="10_pickup"]
+[ext_resource type="AudioStream" uid="uid://rthj74pv5s3f" path="res://sounds/combo.wav" id="11_combo"]
+[ext_resource type="AudioStream" uid="uid://e380l2kuqkma" path="res://sounds/badge.wav" id="12_badge"]
+[ext_resource type="AudioStream" uid="uid://b0cdjeggkotfk" path="res://sounds/invalid.wav" id="13_invalid"]
 
 [node name="Main" type="Node2D" unique_id=654678731]
 script = ExtResource("1_r0du0")
 
-[node name="AnimatedBackground" parent="." instance=ExtResource("2_anim_bg")]
-
+[node name="AnimatedBackground" parent="." unique_id=1146199798 instance=ExtResource("2_anim_bg")]
+anchors_preset = 0
 
 [node name="LevelInfoLabel" type="Label" parent="." unique_id=1079887245]
 offset_top = 25.0
@@ -54,6 +53,14 @@ theme_override_font_sizes/font_size = 26
 text = "Target: 500"
 horizontal_alignment = 1
 
+[node name="HudBackButton" type="Button" parent="." unique_id=1079887247]
+offset_left = 24.0
+offset_top = 28.0
+offset_right = 134.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 24
+text = "◀ MENU"
+
 [node name="Grid" type="Node2D" parent="." unique_id=1245138694]
 position = Vector2(120, 245)
 script = ExtResource("2_cm0pq")
@@ -64,6 +71,7 @@ script = ExtResource("2_cm0pq")
 visible = false
 z_index = 50
 layout_mode = 3
+anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1280.0
 
@@ -167,9 +175,9 @@ text = "RETRY"
 visible = false
 z_index = 50
 layout_mode = 3
+anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1280.0
-
 
 [node name="Dimmer" type="ColorRect" parent="LevelCompleteModal" unique_id=603353515]
 layout_mode = 1
@@ -267,11 +275,11 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 36
 text = "NEXT ➔"
 
-
 [node name="WelcomeScreen" type="Control" parent="." unique_id=987654321]
 visible = false
 z_index = 25
 layout_mode = 3
+anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1280.0
 mouse_filter = 2
@@ -305,7 +313,6 @@ offset_left = 180.0
 offset_top = 680.0
 offset_right = 540.0
 offset_bottom = 776.0
-mouse_filter = 0
 theme_override_font_sizes/font_size = 44
 text = "CLASSIC"
 
@@ -316,37 +323,41 @@ offset_left = 180.0
 offset_top = 800.0
 offset_right = 540.0
 offset_bottom = 896.0
-mouse_filter = 0
 theme_override_font_sizes/font_size = 44
 text = "LEVELS"
-
 
 [node name="LevelSelectionScreen" type="Control" parent="." unique_id=987654322]
 visible = false
 z_index = 25
 layout_mode = 3
+anchors_preset = 0
 offset_right = 720.0
 offset_bottom = 1280.0
 
-
-[node name="ColorRect" type="ColorRect" parent="LevelSelectionScreen" unique_id=111111112]
+[node name="LevelMapBg" type="Control" parent="LevelSelectionScreen" unique_id=111111112]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.08, 0.08, 0.1, 0.95)
+mouse_filter = 2
 
 [node name="TitleLabel" type="Label" parent="LevelSelectionScreen" unique_id=222222223]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 50.0
-offset_bottom = 150.0
+offset_left = 8.0
+offset_top = 207.0
+offset_right = 8.0
+offset_bottom = 307.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.3, 0.6, 0.9, 1)
-theme_override_font_sizes/font_size = 60
+theme_override_colors/font_color = Color(1, 0.95, 0.4, 1)
+theme_override_colors/font_shadow_color = Color(0.2, 0.1, 0.3, 0.8)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 5
+theme_override_font_sizes/font_size = 72
 text = "SELECT LEVEL"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -356,28 +367,25 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = 150.0
-offset_right = -50.0
-offset_bottom = -50.0
+offset_top = 180.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 
-[node name="GridContainer" type="GridContainer" parent="LevelSelectionScreen/ScrollContainer" unique_id=333333337]
+[node name="LevelMapContainer" type="Control" parent="LevelSelectionScreen/ScrollContainer" unique_id=333333337]
+custom_minimum_size = Vector2(720, 15600)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-columns = 5
 
 [node name="BackButton" type="Button" parent="LevelSelectionScreen" unique_id=333333338]
 layout_mode = 1
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 120.0
-offset_bottom = 70.0
-text = "BACK"
+offset_left = 28.0
+offset_top = 111.0
+offset_right = 168.0
+offset_bottom = 179.0
+theme_override_font_sizes/font_size = 32
+text = "◀ BACK"
 
 [node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=444444441]
 stream = ExtResource("6_click")

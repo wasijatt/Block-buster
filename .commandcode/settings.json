@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(powershell -NoProfile -Command \"Get-ChildItem -Recurse -File assets, sounds, addons -ErrorAction SilentlyContinue | Sort-Object Length -Descending | Select-Object -First 25 @{n='KB';e={[math]::Round($_.Length/1KB,1)}}, FullName | Format-Table -AutoSize; Write-Host '---root---'; Get-ChildItem -File -Path . -ErrorAction SilentlyContinue | Where-Object { $_.Extension -match 'png|jpg|apk|aab|keystore|zip' } | Select-Object @{n='MB';e={[math]::Round($_.Length/1MB,2)}}, Name | Format-Table -AutoSize\")",
+      "Shell(powershell -NoProfile -Command \"Get-Command godot, godot4, godot.exe -ErrorAction SilentlyContinue | Select-Object Name, Source; Write-Host '---'; where.exe godot 2>$null; Write-Host 'done'\")",
+      "Shell(powershell -NoProfile -Command \"Get-ChildItem -Recurse -File addons/admob/android | Select-Object @{n='KB';e={[math]::Round($_.Length/1KB,1)}}, FullName | Format-Table -AutoSize | Out-String -Width 250\")",
+      "Shell(powershell -NoProfile -Command \"git ls-files | Select-String -Pattern 'keystore|\\.apk|\\.aab|Block Puzzle|assets/play_icon|restart_icon|music\\.ogg'; Write-Host '---check-ignore---'; git check-ignore blockbuster_release.keystore debug.keystore my-release-key.keystore 'Block Blaster.apk'; Write-Host '---admob plugin cfg in project---'; Select-String -Path project.godot -Pattern 'editor_plugins|dotnet|admob' -SimpleMatch\")",
+      "Shell(powershell -NoProfile -Command \"Write-Host '--- tracked keystores/apk ---'; git ls-files -- '*.keystore' '*.apk' '*.aab' '*.jks'; Write-Host '--- check-ignore verbose ---'; git check-ignore -v blockbuster_release.keystore debug.keystore 'Block Blaster.apk' 'Block Puzzle Blaster LOGO.png'; Write-Host '--- porcelain ---'; git status --porcelain; Write-Host '--- history contains keystore? ---'; git log --oneline --all -- '*.keystore' | Select-Object -First 5\")",
+      "Shell(powershell -NoProfile -Command \"Get-ChildItem -Recurse -File assets/fonts | Select-Object @{n='KB';e={[math]::Round($_.Length/1KB,1)}}, Name, FullName | Format-Table -AutoSize | Out-String -Width 200; Write-Host '--- zip listing ---'; Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip=[System.IO.Compression.ZipFile]::OpenRead((Resolve-Path 'assets/fonts/Baloo2.zip')); $zip.Entries | Select-Object -First 20 FullName, Length | Format-Table -AutoSize; $zip.Dispose()\")",
+      "Shell(powershell -NoProfile -Command \"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; try { Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/google/fonts/main/ofl/baloo2/Baloo2%5Bwght%5D.ttf' -OutFile 'assets/fonts/Baloo2/Baloo2.ttf' -UseBasicParsing -TimeoutSec 30; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/google/fonts/main/ofl/baloo2/OFL.txt' -OutFile 'assets/fonts/Baloo2/OFL.txt' -UseBasicParsing -TimeoutSec 30; Get-ChildItem assets/fonts/Baloo2 | Select-Object Name, @{n='KB';e={[math]::Round($_.Length/1KB,1)}} | Format-Table -AutoSize } catch { Write-Host ('DOWNLOAD FAILED: ' + $_.Exception.Message) }\")",
+      "Shell(curl.exe:*)",
+      "Shell(if:*)",
+      "Shell({:*)",
+      "Shell(Select-Object:*)",
+      "Shell(powershell -NoProfile -Command \"if (Test-Path 'assets/fonts/Baloo2/Baloo2.ttf') { $f = Get-Item 'assets/fonts/Baloo2/Baloo2.ttf'; Write-Host ('size=' + $f.Length); $bytes = [System.IO.File]::ReadAllBytes($f.FullName)[0..3]; Write-Host ('magic=' + [System.Text.Encoding]::ASCII.GetString($bytes)) } else { Write-Host 'file missing' }\")",
+      "Shell(powershell -NoProfile -Command =[IO.File]::ReadAllBytes('C:\\Users\\Waseem\\Desktop\\Block-buster\\assets\\fonts\\Baloo2\\Baloo2.ttf'); Write-Host ('magic=' + [Text.Encoding]::ASCII.GetString([0..3]) + ' size=' + .Length); Get-Item 'assets/fonts/Baloo2/*' | Select-Object Name, Length | Format-Table -AutoSize)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

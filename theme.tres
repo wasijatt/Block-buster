@@ -1,6 +1,8 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://c_global_game_theme"]
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://c_global_game_theme"]
 
-[ext_resource type="FontFile" uid="uid://c_fredoka_font_res" path="res://assets/fonts/Fredoka.ttf" id="1_font"]
+[ext_resource type="FontFile" uid="uid://c07diw6grn8go" path="res://assets/fonts/Fredoka.ttf" id="1_font"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hidden"]
 
 ; ─── BUTTON STYLES (Ultra-Premium Tactile 3D Pill Design) ─────────────────────
 
@@ -121,4 +123,15 @@ Label/font_sizes/font_size = 32
 Label/fonts/font = ExtResource("1_font")
 
 Panel/styles/panel = SubResource("StyleBoxFlat_panel")
+
+VScrollBar/styles/grabber = SubResource("StyleBoxEmpty_hidden")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxEmpty_hidden")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxEmpty_hidden")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_hidden")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxEmpty_hidden")
+HScrollBar/styles/grabber = SubResource("StyleBoxEmpty_hidden")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxEmpty_hidden")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxEmpty_hidden")
+HScrollBar/styles/scroll = SubResource("StyleBoxEmpty_hidden")
+HScrollBar/styles/scroll_focus = SubResource("StyleBoxEmpty_hidden")
 
